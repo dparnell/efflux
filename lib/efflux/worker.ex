@@ -41,6 +41,9 @@ defmodule Efflux.Worker do
       %{"results" => [%{"series" => [series]}]} ->
         # notify the requesting process that we have a data chunk
         send pid, %Efflux.Data{id: request_id, name: series["name"], columns: series["columns"], points: series["values"]}
+      %{"results" => [%{}]} -> 
+        # WTF? We got an empty chunk!
+        nil
       %{"error" => message} ->
         # we got an error from influx, so send that back to the calling process
         send pid, %Efflux.Error{id: request_id, message: message}
