@@ -38,11 +38,11 @@ defmodule Efflux do
     Efflux.Worker.run(pid, query, options)
   end
 
-  def query(query, options) do
+  def all(query, options) do
     reduce(query, [], fn x, acc -> [x | acc] end, options)
   end
 
-  def stream(query, options) do
+  def execute(query, options) do
     Stream.resource(fn -> 
                       {:ok, pid} = connect(options)
                       {:ok, id} = run(pid, query, options)

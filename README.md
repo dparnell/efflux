@@ -25,6 +25,6 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 ## Usage
 
     ```elixir
-    Enum.into(Efflux.stream("show series", host: "localhost", database: "stuff")
+    Enum.into(Efflux.execute("show series", host: "localhost", database: "stuff"), [])
     ```
 
