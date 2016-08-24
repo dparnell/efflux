@@ -21,3 +21,10 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
       [applications: [:efflux]]
     end
     ```
+
+## Usage
+
+    ```elixir
+    Enum.into(Efflux.stream("show series", host: "localhost", database: "stuff")
+    ```
+

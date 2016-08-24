@@ -42,6 +42,28 @@ defmodule Efflux do
     reduce(query, [], fn x, acc -> [x | acc] end, options)
   end
 
+  def stream(query, options) do
+    Stream.resource(fn -> 
+                      {:ok, pid} = connect(options)
+                      {:ok, id} = run(pid, query, options)
+                      id
+                    end,
+                    fn id ->
+                      receive do
+                        %Efflux.Data{name: name, columns: columns, points: points} ->
+                          case options[:raw] do
+                            true -> {[[name: name, columns: columns, points: points]], id}
+                            _ -> {Enum.map(points, fn row -> Enum.zip(columns, row) end), id}
+                          end
+                        %Efflux.EndOfData{} -> {:halt, id}
+                        %Efflux.Error{message: message} -> {:error, message}
+                      end
+                    end,
+                    fn id -> id end
+
+      )
+  end
+
   def reduce(query, acc, row_fn, options \\ []) do
     {:ok, pid} = connect(options)
     run(pid, query, options)
