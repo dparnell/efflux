@@ -24,6 +24,8 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 
 ## Usage
 
+To run a query:
+
     ```elixir
     Enum.into(Efflux.execute("show series", host: "localhost", database: "stuff"), [])
     ```
